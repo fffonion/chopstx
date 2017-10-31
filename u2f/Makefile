@@ -46,6 +46,7 @@ distclean: clean
 
 certclean:
 	rm -f cert/certificates.c
+	rm -f cert/opnssl.cnf
 	rm -f cert/*.der
 	rm -f cert/*.pem
 	rm -f cert/*.csr

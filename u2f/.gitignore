@@ -1,5 +1,5 @@
-*.pem                                   
-*.der                                   
-*.csr                                   
+*.pem
+*.der
+*.csr
+cert/opnssl.cnf
 cert/certificates.c
-
