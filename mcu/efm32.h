@@ -933,3 +933,13 @@ struct MSC
 
 #define MSC_BASE (0x400C0000UL)        /* MSC base address */
 #define MSC ((struct MSC *) MSC_BASE)  /* MSC base pointer */
+
+struct WDOG
+{
+  volatile uint32_t CTRL;              /* Control Register */
+  volatile uint32_t CMD;               /* Command Register */
+  const volatile uint32_t SYNCBUSY;    /* Synchronization Busy Register */
+};
+
+#define WDOG_BASE (0x40088000UL)         /* WDOG base address */
+#define WDOG ((struct WDOG *) WDOG_BASE) /* WDOG base pointer */

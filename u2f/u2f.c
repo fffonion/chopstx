@@ -120,9 +120,6 @@ main (int argc, const char *argv[])
   (void)argc;
   (void)argv;
 
-  // Disable the watchdog timer that the bootloader sets up.
-  *(uint32_t *)0x40088000UL = 0;
-
   m = 50;
 
   chopstx_mutex_init (&mtx);
