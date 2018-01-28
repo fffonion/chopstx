@@ -176,7 +176,7 @@ capsense_init (void)
                    | (0x3d <<  8) /* VDDLEVEL */
                    | (0x0B <<  4);/* NEGSEL = CAPSENSE */
 
-  /* Enable ACMP if requested. */
+  /* Enable ACMP */
   MASKED_WRITE(ACMP0->CTRL, 0x1, 1);
 
   MASKED_WRITE(ACMP0->INPUTSEL, 0x07, 0);

@@ -1,7 +1,7 @@
 /*
  * clk_gpio_init-efm32.c - Clock and GPIO initialization for EFM32HG
  *
- * Copyright (C) 2017 Sergei Glushchenko
+ * Copyright (C) 2017-2018 Sergei Glushchenko
  * Author: Sergei Glushchenko <gl.sergei@gmail.com>
  *
  * This file is a part of Chpostx port to EFM32HG
@@ -31,7 +31,7 @@
 static void __attribute__((used))
 clock_init (void)
 {
-  /* disable watchdog time (set by toboot) */
+  /* disable watchdog timer (set by toboot) */
   WDOG->CTRL = 0;
 
   CMU->HFPERCLKEN0 = CMU_HFPERCLKEN0_GPIO;

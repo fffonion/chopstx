@@ -1,7 +1,7 @@
 /*
  * sys-efm32.c - system vectors for EFM32HG
  *
- * Copyright (C) 2017 Sergei Glushchenko
+ * Copyright (C) 2017-2018 Sergei Glushchenko
  * Author: Sergei Glushchenko <gl.sergei@gmail.com>
  *
  * This file is a part of Chpostx port to EFM32HG
@@ -35,8 +35,11 @@ void reset (void);
 
 static uint32_t
 stack_entry[] __attribute__ ((section(".first_page.first_words"),used)) = {
-  (uint32_t)&__ram_end__,
-  (uint32_t)reset,
+  (uint32_t)&__ram_end__, (uint32_t)reset,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0x0070b0 /* don't allow to enter toboot by shorting outer pads */,
+  0x106fb0 /* let toboot know that starting offset is 0x4000 */
 };
 
 typedef void (*handler)(void);

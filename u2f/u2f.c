@@ -43,6 +43,7 @@
 #include "adc.h"
 // #include "pbt.h"
 #include "csn.h"
+#include "platform.h"
 
 static chopstx_mutex_t mtx;
 static chopstx_cond_t cnd0;
@@ -121,6 +122,8 @@ main (int argc, const char *argv[])
   (void)argv;
 
   m = 50;
+
+  platform_init ();
 
   chopstx_mutex_init (&mtx);
   chopstx_cond_init (&cnd0);

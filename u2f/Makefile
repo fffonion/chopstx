@@ -6,7 +6,7 @@ CHOPSTX = ..
 LDSCRIPT= u2f.ld
 CSRC = u2f.c usb-hid.c dbug.c u2f-hid.c u2f-apdu.c \
 	sha256.c neug.c random.c ec_p256r1.c bn.c jpc_p256r1.c \
-	call-ec_p256r1.c modp256r1.c mod.c hmac.c csn.c
+	call-ec_p256r1.c modp256r1.c mod.c hmac.c csn.c platform.c
 
 CHIP=efm32
 
@@ -26,6 +26,10 @@ CWARN = -Wall -Wextra -Wstrict-prototypes
 DEFS  = -DMAKE_ENTRY_PUBLIC -DUSE_SYS3 -DFREE_STANDING -DMHZ=21
 OPT   = -O3 -Os -fstack-usage
 LIBS  =
+
+ifeq ($(ENFORCE_DEBUG_LOCK),1)
+DEFS += -DENFORCE_DEBUG_LOCK
+endif
 
 ####################
 include ../rules.mk
