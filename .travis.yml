@@ -1,0 +1,18 @@
+language: c
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - gcc-arm-none-eabi
+      - libnewlib-arm-none-eabi
+      - python-pip
+      - openssl
+
+install:
+  - pip install asn1crypto --user
+
+script:
+  - 'cd u2f && make && cd ..'
+  - 'cd u2f && make clean certclean && cd ..'
+  - 'cd u2f && make ENFORCE_DEBUG_LOCK=1 && cd ..'
