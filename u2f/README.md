@@ -1,6 +1,6 @@
-# U2F firmware for STM32
+# U2F firmware for Tomu
 
-U2F firmware for STM32F103 (ARM Cortex-M3).
+U2F firmware for Tomu.
 
 ## Installing
 
@@ -28,7 +28,9 @@ brew install arm-gcc-bin
 Installing on Debian/Ubuntu:
 
 ``` sh
-sudo apt install gcc-arm-none-eabi
+sudo apt-add-repository ppa:team-gcc-arm-embedded/ppa
+sudo apt update
+sudo apt install gcc-arm-embedded
 ```
 
 #### OpenSSL
@@ -52,80 +54,66 @@ To install with pip:
 pip install --user --upgrade asn1crypto
 ```
 
-#### OpenOCD
-
-Installing on macOS with homebrew:
-
-``` sh
-brew install open-ocd
-```
-
-Installing on Debian/Ubuntu:
-
-``` sh
-sudo apt install openocd
-```
-
-
 ### Building
 
 ``` sh
-cd u2f-token/u2f
-```
-
-Chopstx comes with support for multiple STM32 boards. This firmware is known to
-work on Maple Mini and Blue Pill. Default target is Maple Mini. To build
-firmware for Blue Pill run:
-
-``` sh
-ln -s ../board/board-blue-pill.h board.h
-```
-
-Then
-
-```
+https://github.com/im-tomu/chopstx.git
+cd chopstx/u2f
 make
 ```
-
-will produce firmware file `build/u2f.elf`.
-
 
 ### Flashing
 
-#### Using ST-LINK/V2 and OpenOCD
-
-Start OpenOCD:
+Providing you have Toboot installed:
 
 ``` sh
-openocd -f interface/stlink-v2.cfg -f target/stm32f1x.cfg
+dfu-util -v -d 1209:70b1 -D build/u2f.bin
 ```
 
-On other terminal run:
+
+### Readout protection
+
+Make sure to enable readout protection if you are going to use Tomu as 2FA for
+your accounts. Build firmware with `ENFORCE_DEBUG_LOCK=1`:
 
 ``` sh
-telnet localhost 4444
-> reset halt
-> stm32f1x unlock 0
-> reset halt
-> flash write_image erase build/u2f.elf
-> stm32f1x lock 0
-> reset halt
-> shutdown
+make clean
+make ENFORCE_DEBUG_LOCK=1
 ```
 
-Do not flash two devices with the same binary. Currently all certificates are
-built into that binary. Before flashing new device run:
+
+### Injecting private key
+
+Firmware generates EC private key on its first boot and erases it when it
+enters the bootloader. You may want to backup your private key and make it
+survive firmware upgrade. To achieve this, generate the key on your host machine
+and inject it into the firmware binary.
+
+Generate your private key:
 
 ``` sh
-make certclean
-make
+openssl ecparam -name prime256v1 -genkey -noout -outform der -out key.der
 ```
+
+You may want to encrypt your `key.der` and back it up.
+
+Check device's authentication counter if you are going to perform the firmware
+upgrade. You can see it in Yubikey demo site output. For the new device, you can
+skip `ctr` parameter all together or set it to 1. Let's say the current counter
+value is 1000.
+
+Use this command to patch firmware binary:
+
+``` sh
+./inject_key.py --key key.der --ctr 1001
+```
+
 
 ## License
 
-Great thanks to Niibe Yutaka author of Chopstx and Gnuk.
+This project is using code components of Chopstx and Gnuk written by Niibe Yutaka.
 
-Copyright &copy; 2017 Sergei Glushchenko
+Copyright &copy; 2017, 2018 Sergei Glushchenko
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by

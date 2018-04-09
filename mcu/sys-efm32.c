@@ -35,11 +35,7 @@ void reset (void);
 
 static uint32_t
 stack_entry[] __attribute__ ((section(".first_page.first_words"),used)) = {
-  (uint32_t)&__ram_end__, (uint32_t)reset,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0x0070b0 /* don't allow to enter toboot by shorting outer pads */,
-  0x106fb0 /* let toboot know that starting offset is 0x4000 */
+  (uint32_t)&__ram_end__, (uint32_t)reset
 };
 
 typedef void (*handler)(void);
