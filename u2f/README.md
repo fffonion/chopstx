@@ -28,7 +28,9 @@ brew install arm-gcc-bin
 Installing on Debian/Ubuntu:
 
 ``` sh
-sudo apt install gcc-arm-none-eabi
+sudo apt-add-repository ppa:team-gcc-arm-embedded/ppa
+sudo apt update
+sudo apt install gcc-arm-embedded
 ```
 
 #### OpenSSL
@@ -52,25 +54,11 @@ To install with pip:
 pip install --user --upgrade asn1crypto
 ```
 
-#### OpenOCD
-
-Installing on macOS with homebrew:
-
-``` sh
-brew install open-ocd
-```
-
-Installing on Debian/Ubuntu:
-
-``` sh
-sudo apt install openocd
-```
-
-
 ### Building
 
 ``` sh
-cd u2f
+https://github.com/im-tomu/chopstx.git
+cd chopstx/u2f
 make
 ```
 
