@@ -13,7 +13,7 @@ Install and setup Command Line tools for Xcode on macOS.
 Install build-essentials package on Debian/Ubuntu:
 
 ``` sh
-sudo apt install build-essential
+sudo apt install build-essential libnewlib-arm-none-eabi gcc-arm-none-eabi
 ```
 
 #### GNU Toolchain for ARM Embedded Processors
@@ -25,7 +25,7 @@ brew tap osx-cross/arm
 brew install arm-gcc-bin
 ```
 
-Installing on Debian/Ubuntu:
+Installing on Ubuntu:
 
 ``` sh
 sudo apt-add-repository ppa:team-gcc-arm-embedded/ppa
