@@ -70,6 +70,20 @@ Providing you have Toboot installed:
 dfu-util -v -d 1209:70b1 -D build/u2f.bin
 ```
 
+### Update udev rules
+
+On Linux-based systems you will need to update your entry in
+`/etc/udev/rules.d/10-tomu.rules` (or create it if you haven't
+already) to reflect the new product and vendor IDs so that you'll have
+permissions to the device.
+
+```
+ATTRS{idProduct}=="cdab", ATTRS{idVendor}=="0483", MODE="777"
+```
+
+(Note: you can give it a more restrictive mode if you also give it a
+`GROUP` that you're in; if you are on a multi-user system you should
+not set the `MODE` to 777.)
 
 ### Readout protection
 
