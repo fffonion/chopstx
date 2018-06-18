@@ -78,12 +78,10 @@ already) to reflect the new product and vendor IDs so that you'll have
 permissions to the device.
 
 ```
-ATTRS{idProduct}=="cdab", ATTRS{idVendor}=="0483", MODE="777"
+ACTION=="add|change", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="cdab", TAG+="uaccess"
 ```
 
-(Note: you can give it a more restrictive mode if you also give it a
-`GROUP` that you're in; if you are on a multi-user system you should
-not set the `MODE` to 777.)
+Ubuntu before 13.04 Raring will need the `udev-acl` tag rather than `uaccess`.
 
 ### Readout protection
 
