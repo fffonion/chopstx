@@ -18,7 +18,7 @@ script:
   - 'cd u2f'
   - 'make'
   - 'make clean certclean'
-  - 'make ENFORCE_DEBUG_LOCK=1'
+  - 'make'
   - 'openssl ecparam -name prime256v1 -genkey -noout -outform der -out key.der'
   - './inject_key.py --key key.der --ctr 1001'
   - 'cd ..'
