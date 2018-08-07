@@ -14,6 +14,7 @@ USE_SYS = yes
 USE_USB = yes
 USE_ADC = yes
 USE_EVENTFLAG = yes
+ENFORCE_DEBUG_LOCK = 1
 
 ###################################
 CROSS = arm-none-eabi-
