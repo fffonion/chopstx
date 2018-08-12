@@ -33,10 +33,28 @@
 extern uint8_t __ram_end__;
 void reset (void);
 
+void exit(int __status)
+{}
+
 static uint32_t
 stack_entry[] __attribute__ ((section(".first_page.first_words"),used)) = {
-  (uint32_t)&__ram_end__, (uint32_t)reset
+  (uint32_t)&__ram_end__, (uint32_t)reset,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0x0070b0 /* don't allow to enter toboot by shorting outer pads */,
+  0x106fb0 /* let toboot know that starting offset is 0x4000 */
 };
+
+const uint8_t __attribute__((section(".sys.board_name")))
+sys_board_name[] = BOARD_NAME;
+
+const uint8_t sys_version[8] __attribute__((section(".sys.version"))) = {
+  3*2+2,	     /* bLength */
+  0x03,		     /* bDescriptorType = USB_STRING_DESCRIPTOR_TYPE */
+  /* sys version: "3.0" */
+  '3', 0, '.', 0, '0', 0,
+};
+
 
 typedef void (*handler)(void);
 extern handler vector_table[];
@@ -64,6 +82,13 @@ reset (void)
 
   /* Never reach here. */
 }
+
+uint8_t *
+sram_address (uint32_t offset)
+{
+  return ((uint8_t *)0x20000000) + offset;
+}
+
 
 #include "mcu/clk_gpio_init-efm32.c"
 
@@ -150,6 +175,14 @@ flash_erase_page (uintptr_t addr)
   return status;
 }
 
+static int
+flash_program_halfword (uintptr_t addr, uint16_t data)
+{
+
+  return 1;
+}
+
+
 static int __attribute__ ((section(".ramtext")))
 flash_write_word (uintptr_t dst_addr, uint32_t data)
 {
@@ -192,6 +225,49 @@ flash_write (uintptr_t dst_addr, const uint8_t *src, size_t len)
   return 0;
 }
 
+static int
+flash_check_blank (const uint8_t *p_start, size_t size)
+{
+  const uint8_t *p;
+
+  for (p = p_start; p < p_start + size; p++)
+    if (*p != 0xff)
+      return 0;
+
+  return 1;
+}
+
+static void __attribute__((naked))
+flash_erase_all_and_exec (void (*entry)(void))
+{
+//  uintptr_t addr = FLASH_START;
+//#if defined(STM32F103_OVERRIDE_FLASH_SIZE_KB)
+//  uintptr_t end = FLASH_START_ADDR + STM32F103_OVERRIDE_FLASH_SIZE_KB*1024;
+//#else
+//  uintptr_t end = FLASH_START_ADDR + (*FLASH_SIZE_REG)*1024;
+//#endif
+//  uint32_t page_size = 1024;
+//  int r;
+//
+//  if (((*CHIP_ID_REG) & 0xfff) == 0x0414)
+//    page_size = 2048;
+//
+//  while (addr < end)
+//    {
+//      r = flash_erase_page (addr);
+//      if (r != 0)
+//	break;
+//
+//      addr += page_size;
+//    }
+//
+//  if (addr >= end)
+//    (*entry) ();
+//
+  for (;;);
+}
+
+
 handler sys_vector[] __attribute__ ((section(".sys.vectors"))) = {
   clock_init,
   gpio_init,
@@ -199,5 +275,8 @@ handler sys_vector[] __attribute__ ((section(".sys.vectors"))) = {
   flash_unlock,
   (handler)flash_erase_page,
   (handler)flash_write,
+  (handler)flash_program_halfword,
+  (handler)flash_check_blank,
+  (handler)flash_erase_all_and_exec,
   NULL,
 };

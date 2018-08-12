@@ -1318,3 +1318,35 @@ usb_lld_stall_tx (int ep_num)
 {
   efm32hg_ep_in_stall (ep_num);
 }
+
+void usb_lld_prepare_shutdown (void)
+{
+  // XXX: stub
+}
+
+void usb_lld_shutdown (void)
+{
+  // XXX: stub
+}
+
+void usb_lld_write (uint8_t ep_num, const void *buf, size_t len)
+{
+    usb_lld_tx_enable_buf (ep_num, buf, len);
+}
+
+void usb_lld_txcpy (const void *src, int ep_num, int offset, size_t len)
+{
+}
+
+void usb_lld_rxcpy (uint8_t *dst, int ep_num, int offset, size_t len)
+{
+}
+
+void usb_lld_tx_enable (int ep_num, size_t len)
+{
+}
+
+void usb_lld_rx_enable (int ep_num)
+{
+}
+

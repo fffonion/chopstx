@@ -5,6 +5,7 @@ extern const char *const sys_board_name;
 #endif
 
 typedef void (*handler)(void);
+typedef void (*nonreturn_handler1)(void *)__attribute__((noreturn));
 extern handler sys_vector[16];
 
 static inline void
@@ -44,6 +45,34 @@ flash_erase_page (uintptr_t addr)
 
   return (*func) (addr);
 }
+
+static inline int
+flash_program_halfword (uintptr_t addr, uint16_t data)
+{
+  int (*func) (uintptr_t, uint16_t) = (int (*)(uintptr_t, uint16_t))sys_vector[6];
+
+  return (*func) (addr, data);
+
+}
+
+static inline int
+flash_check_blank (const uint8_t *p_start, size_t size)
+{
+  int (*func) (const uint8_t *, int) = (int (*)(const uint8_t *, int))sys_vector[7];
+
+  return (*func) (p_start, size);
+}
+
+static inline void __attribute__((noreturn))
+flash_erase_all_and_exec (void (*entry)(void))
+{
+  nonreturn_handler1 func = (nonreturn_handler1) sys_vector[8] ;
+
+  (*func) (entry);
+}
+
+
+
 
 static inline int
 flash_write (uintptr_t dst_addr, const uint8_t *src, size_t len)
