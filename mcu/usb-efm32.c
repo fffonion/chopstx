@@ -1334,19 +1334,26 @@ void usb_lld_write (uint8_t ep_num, const void *buf, size_t len)
     usb_lld_tx_enable_buf (ep_num, buf, len);
 }
 
+static uint8_t endp1_tx_buf[64]; /* Only support single CCID interface.  */
+static uint8_t endp1_rx_buf[64]; /* Only support single CCID interface.  */
+
 void usb_lld_txcpy (const void *src, int ep_num, int offset, size_t len)
 {
+	memcpy (endp1_tx_buf+offset, src + offset, len);
 }
 
 void usb_lld_rxcpy (uint8_t *dst, int ep_num, int offset, size_t len)
 {
+	memcpy (dst, endp1_rx_buf+offset, len);
 }
 
 void usb_lld_tx_enable (int ep_num, size_t len)
 {
+  usb_lld_tx_enable_buf (ep_num,  endp1_tx_buf, len);
 }
 
 void usb_lld_rx_enable (int ep_num)
 {
+  usb_lld_rx_enable_buf (ep_num, endp1_rx_buf, sizeof endp1_rx_buf);
 }
 
