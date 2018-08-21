@@ -54,6 +54,8 @@ To install with pip:
 pip install --user --upgrade asn1crypto
 ```
 
+*If you were trigger happy and tried to run ```make``` before you installed this package, you will need to run the command* ```make certclean``` *then install the package, and finally run ```make``` again.*
+
 ### Building
 
 ``` sh
