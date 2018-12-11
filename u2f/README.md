@@ -59,7 +59,7 @@ pip install --user --upgrade asn1crypto
 ### Building
 
 ``` sh
-https://github.com/im-tomu/chopstx.git
+git clone https://github.com/im-tomu/chopstx.git
 cd chopstx/u2f
 make
 ```
