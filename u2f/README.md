@@ -54,10 +54,12 @@ To install with pip:
 pip install --user --upgrade asn1crypto
 ```
 
+*If you were trigger happy and tried to run ```make``` before you installed this package, you will need to run the command* ```make certclean``` *then install the package, and finally run ```make``` again.*
+
 ### Building
 
 ``` sh
-https://github.com/im-tomu/chopstx.git
+git clone https://github.com/im-tomu/chopstx.git
 cd chopstx/u2f
 make
 ```
@@ -85,12 +87,12 @@ Ubuntu before 13.04 Raring will need the `udev-acl` tag rather than `uaccess`.
 
 ### Readout protection
 
-Make sure to enable readout protection if you are going to use Tomu as 2FA for
-your accounts. Build firmware with `ENFORCE_DEBUG_LOCK=1`:
+Readout protection is enabled by default. To disable it, build firmware with
+`ENFORCE_DEBUG_LOCK=0`:
 
 ``` sh
 make clean
-make ENFORCE_DEBUG_LOCK=1
+make ENFORCE_DEBUG_LOCK=0
 ```
 
 
